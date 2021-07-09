@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" TextQuality="Regular" ReportInfo.Name="Simple List" ReportInfo.Author="Fast Reports Inc" ReportInfo.Description="Демонстрация простого листа" ReportInfo.Created="01/17/2008 03:05:57" ReportInfo.Modified="07/09/2021 14:07:46" ReportInfo.CreatorVersion="2021.3.0.0">
+<Report ScriptLanguage="CSharp" TextQuality="Regular" ReportInfo.Name="Simple List" ReportInfo.Author="Fast Reports Inc" ReportInfo.Description="Демонстрация простого листа" ReportInfo.Created="01/17/2008 03:05:57" ReportInfo.Modified="07/09/2021 18:49:40" ReportInfo.CreatorVersion="2021.3.0.0">
   <Dictionary>
     <TableDataSource Name="Employees" ReferenceName="Employees" DataType="System.Int32" Enabled="true">
       <Column Name="ActiveName" DataType="System.String"/>
@@ -60,7 +60,7 @@
       <SubreportObject Name="Subreport4" Left="189" Top="86.94" Width="529.2" Height="37.8" ReportPage="Page5" PrintOnParent="true"/>
     </DataBand>
     <DataBand Name="Data8" Top="1564.35" Width="718.2" Height="37.8" CanGrow="true" DataSource="Seconddata">
-      <TableObject Name="Table103" Width="597.24" Height="37.8">
+      <TableObject Name="Table103" Width="716.31" Height="37.8">
         <TableColumn Name="Column108" Width="83.16"/>
         <TableColumn Name="Column109" Width="86.94"/>
         <TableColumn Name="Column117" Width="94.5"/>
@@ -68,6 +68,7 @@
         <TableColumn Name="Column125" Width="75.6"/>
         <TableColumn Name="Column129" Width="94.5"/>
         <TableColumn Name="Column133" Width="86.94"/>
+        <TableColumn Name="Column137" Width="119.07"/>
         <TableRow Name="Row6" Height="37.8">
           <TableCell Name="Cell110" Border.Lines="All" Text="[Seconddata.ActiveName]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell111" Border.Lines="All" Text="[Seconddata.ActiveName]" VertAlign="Center" Font="Arial, 10pt"/>
@@ -76,10 +77,11 @@
           <TableCell Name="Cell126" Border.Lines="All" Text="[Seconddata.ActiveName]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell130" Border.Lines="All" Text="[Seconddata.ActiveName]" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell134" Border.Lines="All" Text="[Seconddata.ActiveName]" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell138" Border.Lines="All" Text="[Seconddata.ActiveName]" VertAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
       <DataHeaderBand Name="DataHeader100" Top="1494.2" Width="718.2" Height="66.15">
-        <TableObject Name="Table110" Top="28.35" Width="597.24" Height="37.8">
+        <TableObject Name="Table110" Top="28.35" Width="716.31" Height="37.8">
           <TableColumn Name="Column111" Width="83.16"/>
           <TableColumn Name="Column112" Width="86.94"/>
           <TableColumn Name="Column115" Width="94.5"/>
@@ -87,6 +89,7 @@
           <TableColumn Name="Column123" Width="75.6"/>
           <TableColumn Name="Column127" Width="94.5"/>
           <TableColumn Name="Column131" Width="86.94"/>
+          <TableColumn Name="Column135" Width="119.07"/>
           <TableRow Name="Row5" Height="37.8">
             <TableCell Name="Cell113" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Дата" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
             <TableCell Name="Cell114" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Тип операции" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
@@ -95,6 +98,7 @@
             <TableCell Name="Cell124" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Кол-во" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
             <TableCell Name="Cell128" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Сумма сделки" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
             <TableCell Name="Cell132" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Комиссия" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+            <TableCell Name="Cell136" Border.Lines="All" Fill.Color="WhiteSmoke" Text="Статус операции" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
           </TableRow>
         </TableObject>
         <TextObject Name="Text30" Width="718.2" Height="28.35" Fill.Color="LightGray" Text="История операций" VertAlign="Center" Font="Arial, 12pt, style=Bold"/>

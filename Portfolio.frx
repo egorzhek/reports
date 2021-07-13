@@ -1,5 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" TextQuality="Regular" ReportInfo.Name="Simple List" ReportInfo.Author="Fast Reports Inc" ReportInfo.Description="Демонстрация простого листа" ReportInfo.Created="01/17/2008 03:05:57" ReportInfo.Modified="07/09/2021 18:49:40" ReportInfo.CreatorVersion="2021.3.0.0">
+<Report ScriptLanguage="CSharp" TextQuality="Regular" ReportInfo.Name="Simple List" ReportInfo.Author="Fast Reports Inc" ReportInfo.Description="Демонстрация простого листа" ReportInfo.Created="01/17/2008 03:05:57" ReportInfo.Modified="07/13/2021 11:16:55" ReportInfo.CreatorVersion="2021.3.0.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  {
+    private void Text31_BeforePrint(object sender, EventArgs e)
+    {
+      string colorhex = &quot;#&quot; + Report.GetColumnValue(&quot;Seconddata.Color&quot;);
+      Color col = ColorTranslator.FromHtml(colorhex);
+      Text31.TextColor = col;
+    }
+  }
+}
+</ScriptText>
   <Dictionary>
     <TableDataSource Name="Employees" ReferenceName="Employees" DataType="System.Int32" Enabled="true">
       <Column Name="ActiveName" DataType="System.String"/>
@@ -8,6 +35,7 @@
     <TableDataSource Name="Seconddata" ReferenceName="Seconddata" DataType="System.Int32" Enabled="true">
       <Column Name="ActiveName" DataType="System.String"/>
       <Column Name="ActiveValue" DataType="System.Decimal"/>
+      <Column Name="Color" DataType="System.String"/>
     </TableDataSource>
     <TableDataSource Name="Thirddata" ReferenceName="Thirddata" DataType="System.Int32" Enabled="true">
       <Column Name="InvestorName" DataType="System.String"/>
@@ -115,9 +143,10 @@
     </DataBand>
   </ReportPage>
   <ReportPage Name="Page3" Watermark.Font="Arial, 60pt">
-    <DataBand Name="Data4" Width="718.2" Height="18.9" DataSource="Seconddata">
-      <TextObject Name="Text16" Left="47.25" Width="170.1" Height="18.9" Text="[Seconddata.ActiveName]" Font="Arial, 10pt"/>
-      <TextObject Name="Text17" Left="255.15" Width="170.1" Height="18.9" Text="[Seconddata.ActiveValue]%" Format="Number" Format.UseLocale="true" Format.DecimalDigits="1" Font="Arial, 10pt"/>
+    <DataBand Name="Data4" Width="718.2" Height="22.68" DataSource="Seconddata">
+      <TextObject Name="Text16" Left="47.25" Width="170.1" Height="18.9" Text="[Seconddata.ActiveName]" VertAlign="Bottom" Font="Arial, 10pt"/>
+      <TextObject Name="Text17" Left="255.15" Width="170.1" Height="18.9" Text="[Seconddata.ActiveValue]%" Format="Number" Format.UseLocale="true" Format.DecimalDigits="1" VertAlign="Bottom" Font="Arial, 10pt"/>
+      <TextObject Name="Text31" Left="22.68" Width="18.9" Height="18.9" BeforePrintEvent="Text31_BeforePrint" Text="●" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
     </DataBand>
   </ReportPage>
   <ReportPage Name="Page4" PaperWidth="170" Watermark.Font="Arial, 60pt">

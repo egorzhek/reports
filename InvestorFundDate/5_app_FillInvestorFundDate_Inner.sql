@@ -6,12 +6,59 @@ CREATE PROCEDURE [dbo].[app_FillInvestorFundDate_Inner]
 	@Investor int = 16541, @FundId Int = 466991
 )
 AS BEGIN
+
 	set nocount on;
 	DECLARE @Min1Date Date, @Min2Date Date, @Max1Date Date, @Max2Date Date, @LastBeginDate Date;
 	DECLARE @Dates table([Date] date);
 
 	DECLARE @CurrentDate Date = getdate()
 	DECLARE @LastEndDate Date = DateAdd(DAY, -180, @CurrentDate)
+
+
+
+
+
+
+	-- предусловие
+	DECLARE @CacheMAXDate Date, @SumAmount numeric(38, 10)
+
+	SELECT 
+		@CacheMAXDate = ([Date]) 
+	FROM
+	(
+		SELECT [Date]
+		FROM [CacheDB].[dbo].[InvestorFundDate] NOLOCK
+		WHERE Investor = @Investor and FundId = @FundId
+		UNION
+		SELECT [Date]
+		FROM [CacheDB].[dbo].[InvestorFundDateLast] NOLOCK
+		WHERE Investor = @Investor and FundId = @FundId
+	) AS D
+
+
+
+	if @CacheMAXDate is not null
+	BEGIN
+		SELECT
+			@SumAmount = SumAmount 
+		FROM
+		(
+			SELECT SumAmount
+			FROM [CacheDB].[dbo].[InvestorFundDate] NOLOCK
+			WHERE Investor = @Investor and FundId = @FundId AND [Date] = @CacheMAXDate
+			UNION
+			SELECT SumAmount
+			FROM [CacheDB].[dbo].[InvestorFundDateLast] NOLOCK
+			WHERE Investor = @Investor and FundId = @FundId AND [Date] = @CacheMAXDate
+		) AS D
+	END
+
+	-- не пересчитывать пиф, если закрыт более полугода назад
+	If @CacheMAXDate <  DateAdd(DAY, -10, @LastEndDate) and @SumAmount = 0.000 return;
+
+
+
+
 
 
 		SET @Min1Date = NULL;

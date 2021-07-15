@@ -3,7 +3,7 @@ USE [CacheDB]
 GO
 CREATE PROCEDURE [dbo].[app_FillInvestorFundDate_Inner]
 (
-	@Investor int = 16541, @FundId Int = 466991
+	@Investor int = 16541, @FundId Int = 17578
 )
 AS BEGIN
 
@@ -213,9 +213,10 @@ AS BEGIN
 						--[AmountDayPlus_EVRO] = CASE WHEN ISNULL(VE.RATE,0) = 0 THEN 0 ELSE [BAL_DATA_STD].[dbo].f_Round(B.AmountDayPlus * VL.[RATE] * (1.0000000/VE.RATE), 2) END,
 
 						[AmountDayMinus] = B.AmountDayMinus,
-						[AmountDayMinus_RUR] = [BAL_DATA_STD].[dbo].f_Round(B.AmountDayMinus * VL.[RATE], 2)
+						[AmountDayMinus_RUR] = [BAL_DATA_STD].[dbo].f_Round(B.AmountDayMinus * VL.[RATE], 2),
 						--[AmountDayMinus_USD] = CASE WHEN ISNULL(VB.RATE,0) = 0 THEN 0 ELSE [BAL_DATA_STD].[dbo].f_Round(B.AmountDayMinus * VL.[RATE] * (1.0000000/VB.RATE), 2) END,
 						--[AmountDayMinus_EVRO] = CASE WHEN ISNULL(VE.RATE,0) = 0 THEN 0 ELSE [BAL_DATA_STD].[dbo].f_Round(B.AmountDayMinus * VL.[RATE] * (1.0000000/VE.RATE), 2) END
+						[LS_NUM] = LS.[LS_NUM]
 					INTO #TempFund4
 					FROM
 					(
@@ -266,6 +267,21 @@ AS BEGIN
 							RT.[E_DATE] DESC,
 							RT.[OFICDATE] DESC
 					) AS VE
+
+					OUTER APPLY
+					(
+						SELECT TOP(1)
+							[LS_NUM] = T.[DEPO_LS]
+						FROM [BAL_DATA_STD].[dbo].[D_B_TRUSTERS]   AS T 
+						INNER JOIN [BAL_DATA_STD].[dbo].[OD_DOCS]  AS D ON D.[ID]     = T.[DOC]
+						INNER JOIN [BAL_DATA_STD].[dbo].[OD_FUNDS] AS F ON F.[U_FACE] = T.[FOND]
+						WHERE 
+							T.[TRUSTER] = @Investor
+							AND F.[SHARE] = @FundId
+							AND T.[E_DATE] > B.D
+							AND D.[STATE] IN (1,2846163)
+						ORDER BY D.[D_DATE] DESC
+					) AS LS
 				
 					--WHERE B.D > @LastBeginDate and B.D <= @LastEndDate -- заливка постоянного кэша в диапазоне дат
 
@@ -296,9 +312,10 @@ AS BEGIN
 						[AmountDayPlus_EVRO] = CASE WHEN [EVRORATE] = 0 THEN 0.000 ELSE [dbo].f_Round([AmountDayPlus_RUR] * (1.0000000/[EVRORATE]), 2) END,
 
 						[AmountDayMinus],
-						[AmountDayMinus_RUR]
+						[AmountDayMinus_RUR],
 						--[AmountDayMinus_USD] = [dbo].f_Round([AmountDayMinus_RUR] * (1.0000000/[USDRATE]), 2),
 						--[AmountDayMinus_EVRO] = [dbo].f_Round([AmountDayMinus_RUR] * (1.0000000/[EVRORATE]), 2)
+						[LS_NUM]
 					INTO #TempFund5
 					FROM
 					(
@@ -341,7 +358,8 @@ AS BEGIN
 						[AmountDayMinus],
 						[AmountDayMinus_RUR],
 						[AmountDayMinus_USD] = CASE WHEN [USDRATE] = 0 THEN 0.000 ELSE [dbo].f_Round([AmountDayMinus_RUR] * (1.0000000/[USDRATE]), 2) END,
-						[AmountDayMinus_EVRO] = CASE WHEN [EVRORATE] = 0 THEN 0.000 ELSE [dbo].f_Round([AmountDayMinus_RUR] * (1.0000000/[EVRORATE]), 2) END
+						[AmountDayMinus_EVRO] = CASE WHEN [EVRORATE] = 0 THEN 0.000 ELSE [dbo].f_Round([AmountDayMinus_RUR] * (1.0000000/[EVRORATE]), 2) END,
+						[LS_NUM]
 					FROM
 					(
 						select * from  #TempFund5
@@ -374,7 +392,8 @@ AS BEGIN
 					[AmountDayMinus],
 					[AmountDayMinus_RUR],
 					[AmountDayMinus_USD],
-					[AmountDayMinus_EVRO]
+					[AmountDayMinus_EVRO],
+					[LS_NUM]
 				)
 				values (
 					s.[Investor],
@@ -398,7 +417,8 @@ AS BEGIN
 					s.[AmountDayMinus],
 					s.[AmountDayMinus_RUR],
 					s.[AmountDayMinus_USD],
-					s.[AmountDayMinus_EVRO]
+					s.[AmountDayMinus_EVRO],
+					s.[LS_NUM]
 				)
 			when matched
 			then update set
@@ -419,7 +439,8 @@ AS BEGIN
 				[AmountDayMinus] = s.[AmountDayMinus],
 				[AmountDayMinus_RUR] = s.[AmountDayMinus_RUR],
 				[AmountDayMinus_USD] = s.[AmountDayMinus_USD],
-				[AmountDayMinus_EVRO] = s.[AmountDayMinus_EVRO];
+				[AmountDayMinus_EVRO] = s.[AmountDayMinus_EVRO],
+				[LS_NUM] = s.[LS_NUM];
 			
 		
 
@@ -466,7 +487,8 @@ AS BEGIN
 						[AmountDayMinus],
 						[AmountDayMinus_RUR],
 						[AmountDayMinus_USD] = CASE WHEN [USDRATE] = 0 THEN 0.000 ELSE [dbo].f_Round([AmountDayMinus_RUR] * (1.0000000/[USDRATE]), 2) END,
-						[AmountDayMinus_EVRO] = CASE WHEN [EVRORATE] = 0 THEN 0.000 ELSE [dbo].f_Round([AmountDayMinus_RUR] * (1.0000000/[EVRORATE]), 2) END
+						[AmountDayMinus_EVRO] = CASE WHEN [EVRORATE] = 0 THEN 0.000 ELSE [dbo].f_Round([AmountDayMinus_RUR] * (1.0000000/[EVRORATE]), 2) END,
+						[LS_NUM]
 					FROM
 					(
 						select * from  #TempFund5
@@ -499,7 +521,8 @@ AS BEGIN
 					[AmountDayMinus],
 					[AmountDayMinus_RUR],
 					[AmountDayMinus_USD],
-					[AmountDayMinus_EVRO]
+					[AmountDayMinus_EVRO],
+					[LS_NUM]
 				)
 				values (
 					s.[Investor],
@@ -523,7 +546,8 @@ AS BEGIN
 					s.[AmountDayMinus],
 					s.[AmountDayMinus_RUR],
 					s.[AmountDayMinus_USD],
-					s.[AmountDayMinus_EVRO]
+					s.[AmountDayMinus_EVRO],
+					s.[LS_NUM]
 				)
 			when matched
 			then update set
@@ -544,7 +568,8 @@ AS BEGIN
 				[AmountDayMinus] = s.[AmountDayMinus],
 				[AmountDayMinus_RUR] = s.[AmountDayMinus_RUR],
 				[AmountDayMinus_USD] = s.[AmountDayMinus_USD],
-				[AmountDayMinus_EVRO] = s.[AmountDayMinus_EVRO];
+				[AmountDayMinus_EVRO] = s.[AmountDayMinus_EVRO],
+				[LS_NUM] = s.[LS_NUM];
 
 		BEGIN TRY
 			DROP TABLE #TempFund;

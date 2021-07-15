@@ -21,6 +21,7 @@ CREATE TABLE [dbo].[InvestorFundDate]
 	[AmountDayMinus_RUR] [numeric](38, 10) NULL,
 	[AmountDayMinus_USD] [numeric](38, 10) NULL,
 	[AmountDayMinus_EVRO] [numeric](38, 10) NULL,
+	[LS_NUM] NVarChar(120),
 CONSTRAINT [PK_InvestorFundDate] PRIMARY KEY CLUSTERED
 (
 	[Investor] ASC,
@@ -50,6 +51,7 @@ CREATE TABLE [dbo].[InvestorFundDateLast]
 	[AmountDayMinus_RUR] [numeric](38, 10) NULL,
 	[AmountDayMinus_USD] [numeric](38, 10) NULL,
 	[AmountDayMinus_EVRO] [numeric](38, 10) NULL,
+	[LS_NUM] NVarChar(120),
 CONSTRAINT [PK_InvestorFundDateLast] PRIMARY KEY CLUSTERED 
 (
 	[Investor] ASC,

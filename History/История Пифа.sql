@@ -65,4 +65,5 @@ AND R.REG_2 = @FundId
 AND R.REG_1 = @Investor
 AND T.WIRING is not null
 AND B2.WALK > 0 -- проводка реализована.
+AND B2.WALK <> 9
 ORDER BY T.WIRDATE;

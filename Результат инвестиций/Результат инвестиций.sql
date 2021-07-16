@@ -4,8 +4,8 @@
 --@EndDate Date = '2017-12-28'
 
 Declare @Investor int = 16541, @FundId int = 17578,
-@StartDate Date = '2009-09-19',
-@EndDate Date = '2009-09-24'
+@StartDate Date = '2003-09-19',
+@EndDate Date = '2018-12-20'
 
 Declare @SItog numeric(30,10), @AmountDayMinus_RUR numeric(30,10), @Snach numeric(30,10), @AmountDayPlus_RUR numeric(30,10),
 @InvestResult numeric(30,10);
@@ -154,10 +154,14 @@ set @InvestResult =
 			--select @LastDate, @DateCur, @T, @Snach, @SumAmountDay_RUR, @Counter as '@Counter', @T * (@Snach + @SumAmountDay_RUR)
 
 			set @ResutSum += @T * (@Snach + @SumAmountDay_RUR)
+			--set @Snach = @Snach + @SumAmountDay_RUR
 			set @LastDate = @DateCur
-			set @SumAmountDay_RUR = @AmountDayPlus_RUR + @AmountDayMinus_RUR
+			set @SumAmountDay_RUR = @SumAmountDay_RUR + @AmountDayPlus_RUR + @AmountDayMinus_RUR
+			--set @SumAmountDay_RUR = @AmountDayPlus_RUR + @AmountDayMinus_RUR
+			--set @SumAmountDay_RUR = @SumAmountDay_RUR
 			set @SumT += @T;
 			
+			--select @Snach, @ResutSum, @LastDate, @SumAmountDay_RUR
 			-- 56081083,08
 		end
 
@@ -195,5 +199,3 @@ BEGIN TRY
 END TRY
 BEGIN CATCH
 END CATCH;
-
-
